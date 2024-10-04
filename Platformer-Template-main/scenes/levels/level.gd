@@ -79,6 +79,7 @@ func _on_button_pressed() -> void:
 func _on_player_player_dead():
 	$Player.velocity = Vector2.ZERO
 	$Player.position = playerRespawn
+	$Player.respawn()
 
 const greenTilesheets = [preload("res://assets/art/flip_block_green_off_tilesheet.png"),
 						 preload("res://assets/art/flip_block_green_on_tilesheet.png")]

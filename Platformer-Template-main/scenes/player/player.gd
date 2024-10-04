@@ -2,7 +2,7 @@ extends CharacterBody2D
 class_name Player
 
 # movement parameters (play with them in the inspector ->)
-@export var SPEED: float = 400
+@export var SPEED: float = 150
 @export var ACCEL_TIME: float = 0.2  # time to full speed in seconds
 @export var JUMP_VELOCITY: float = -700 # (negative is up, positive is down)
 @export var JUMP_GRAVITY_MIN: float = 1200  # Short press
@@ -22,7 +22,13 @@ var tile_map_layer: TileMapLayer = null
 var friction: float = 1
 
 func _ready() -> void:
+	respawn()
+	
+func respawn() -> void:
 	$AnimatedSprite2D.play()
+	velocity.x = SPEED
+
+
 
 # Handles player input and movement
 func _physics_process(delta: float) -> void:
@@ -60,33 +66,13 @@ func _physics_process(delta: float) -> void:
 
 	# HORIZONTAL MOVEMENT
 	# -------------------------------------------------
-	# if on floor, get friction of tile below
-	if is_on_floor():
-		if get_tile_friction() != -1:
-			friction = get_tile_friction()
-	else:
-		friction = 1
-
+	
 	var accel: float = SPEED/ACCEL_TIME  # acceleration = velocity / time
 	var true_accel: float = accel * friction  # less friction less acceleration
 	var max_speed: float = SPEED / friction   # less friction more speed
-
-	# direction player is trying to move
-	#    left=-1, not moving=0, right=1
-	var direction := Input.get_axis("move_left", "move_right")
-
-	# if moving, we accelerate in that direction
-	if (direction != 0):
-		if (direction > 0 and velocity.x < max_speed) or \
-		   (direction < 0 and velocity.x > -max_speed) or \
-		   is_on_floor():
-			velocity.x += direction * true_accel * delta
-			velocity.x = clamp(velocity.x, -max_speed, max_speed)
-
-	# otherwise slow the player down
-	else:
-		velocity.x = move_toward(velocity.x, 0, true_accel*delta)
-		
+	
+	var direction = sign(velocity.x)
+	
 	if (jump_held and velocity.y >= 0):
 		jump_held = false
 		jump_held_timer = 0.0
@@ -111,6 +97,8 @@ func _physics_process(delta: float) -> void:
 		
 	
 	move_and_slide() # moves and collides player based on velocity
+	if is_on_wall_only() or (is_on_wall() and velocity.y >= 0):
+		velocity.x = SPEED * -direction
 
 signal player_dead
 func hurt() -> void:
