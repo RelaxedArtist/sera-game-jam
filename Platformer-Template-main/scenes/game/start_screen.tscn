@@ -1,0 +1,56 @@
+[gd_scene load_steps=5 format=3 uid="uid://dm4ujsqb0cnga"]
+
+[ext_resource type="Script" path="res://scenes/game/start_screen.gd" id="1_p2v3d"]
+[ext_resource type="Texture2D" uid="uid://do3u01fttefc" path="res://assets/art/background.png" id="2_dfp3l"]
+[ext_resource type="Theme" uid="uid://oil57l5gkkxg" path="res://resources/themes/header_text.tres" id="3_pn8o3"]
+[ext_resource type="Theme" uid="uid://cnrdyrlmhr3x0" path="res://resources/themes/button_theme.tres" id="4_vmdlk"]
+
+[node name="StartScreen" type="Node"]
+script = ExtResource("1_p2v3d")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_right = 1280.0
+offset_bottom = 720.0
+texture = ExtResource("2_dfp3l")
+stretch_mode = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -640.0
+offset_right = 640.0
+offset_bottom = 720.0
+grow_horizontal = 2
+theme_override_constants/margin_top = 215
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 65
+
+[node name="Title" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("3_pn8o3")
+text = "Platformer Template"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 25
+
+[node name="StartButton" type="Button" parent="MarginContainer/VBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(260, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("4_vmdlk")
+text = "Start"
+
+[node name="QuitButton" type="Button" parent="MarginContainer/VBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(260, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("4_vmdlk")
+text = "Quit"
+
+[connection signal="pressed" from="MarginContainer/VBoxContainer/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
