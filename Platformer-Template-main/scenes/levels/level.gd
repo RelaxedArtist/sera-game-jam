@@ -1,5 +1,5 @@
 extends Node
-class_name Level
+class_name Main
 
 var next_level : PackedScene
 

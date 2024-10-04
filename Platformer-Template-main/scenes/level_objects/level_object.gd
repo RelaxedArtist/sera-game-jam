@@ -2,7 +2,7 @@ class_name LevelObject
 extends Area2D
 
 var player: Player
-var level: Level
+var level: Main
 
 # Level objects can be interactable
 #  When the player touches the object, an arrow appears and allows the player
