@@ -8,6 +8,11 @@ class_name Player
 @export var JUMP_GRAVITY_MIN: float = 1200  # Short press
 @export var JUMP_GRAVITY_MAX: float = 3600  # Long press
 @export var FALL_GRAVITY: float = 1500  # fall faster than you rise
+@export var FACING_DIRECTION: float = 1
+
+# summon parameters
+@export var BLAST_VELOCITY: float = -1000 # strength of blast jump
+
 
 const terminal_velocity := 800.0
 const max_jump_held_time := 1.0
@@ -27,6 +32,20 @@ func _ready() -> void:
 func respawn() -> void:
 	$AnimatedSprite2D.play()
 	velocity.x = SPEED
+
+
+signal spawn_box
+func _process(delta: float) -> void:
+	### SET SPELL SLOTS
+	# blast 
+	if Input.is_action_just_pressed("summon_1"):
+		velocity.y = BLAST_VELOCITY
+		jump_held = false
+	
+	# box jump
+	if Input.is_action_just_pressed("summon_2"):
+		spawn_box.emit()
+	
 
 
 
@@ -71,7 +90,7 @@ func _physics_process(delta: float) -> void:
 	var true_accel: float = accel * friction  # less friction less acceleration
 	var max_speed: float = SPEED / friction   # less friction more speed
 	
-	var direction = sign(velocity.x)
+	FACING_DIRECTION = sign(velocity.x)
 	
 	if (jump_held and velocity.y >= 0):
 		jump_held = false
@@ -84,7 +103,7 @@ func _physics_process(delta: float) -> void:
 	# ANIMATION
 	# -------------------------------------------------
 	if (is_on_floor()):
-		if (direction != 0):
+		if (FACING_DIRECTION != 0):
 			$AnimatedSprite2D.animation = "walk"
 		else:
 			$AnimatedSprite2D.animation = "idle"
@@ -92,13 +111,16 @@ func _physics_process(delta: float) -> void:
 		$AnimatedSprite2D.animation = "jump"
 	else:
 		$AnimatedSprite2D.animation = "fall"
-	if (direction != 0):
-		$AnimatedSprite2D.flip_h = direction == -1
+	if (FACING_DIRECTION != 0):
+		$AnimatedSprite2D.flip_h = FACING_DIRECTION == -1
 		
 	
 	move_and_slide() # moves and collides player based on velocity
 	if is_on_wall_only() or (is_on_wall() and velocity.y >= 0):
-		velocity.x = SPEED * -direction
+		velocity.x = SPEED * -FACING_DIRECTION
+
+
+
 
 signal player_dead
 func hurt() -> void:

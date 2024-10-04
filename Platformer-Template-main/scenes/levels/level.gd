@@ -100,3 +100,13 @@ func _on_tick_timer_timeout():
 
 func set_respawn(pos : Vector2):
 	playerRespawn = pos
+
+
+var box_instance = preload("res://scenes/level_objects/box.tscn")
+
+func _on_player_spawn_box() -> void:
+	var obj = box_instance.instantiate()
+	call_deferred("add_child", obj)
+	obj.position = $Player.position + Vector2(200,150)
+	
+	pass # Replace with function body.

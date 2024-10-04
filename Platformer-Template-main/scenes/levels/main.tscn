@@ -89,4 +89,5 @@ stream = ExtResource("10_eobi8")
 
 [connection signal="timeout" from="TickTimer" to="." method="_on_tick_timer_timeout"]
 [connection signal="player_dead" from="Player" to="." method="_on_player_player_dead"]
+[connection signal="spawn_box" from="Player" to="." method="_on_player_spawn_box"]
 [connection signal="pressed" from="ClearScreen/CenterContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]
