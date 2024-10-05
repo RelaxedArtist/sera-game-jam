@@ -102,7 +102,7 @@ func set_respawn(pos : Vector2):
 	playerRespawn = pos
 
 
-var box_instance = preload("res://scenes/level_objects/box.tscn")
+@onready var box_instance = preload("res://scenes/level_objects/box.tscn")
 
 func _on_player_spawn_box() -> void:
 	var obj = box_instance.instantiate()
